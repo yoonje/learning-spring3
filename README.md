@@ -86,8 +86,9 @@ Spring IoC Container
 ### @Component와 컴포넌트 스캔
 - `@ComponentScan` 주요 기능
   - 스캔 시작 위치 설정
-  - 어떤 애노테이션을 스캔할지 또는 하지 않을지 필터 설정
-- 대표적인 `@Component`
+  - 어떤 애노테이션을 스캔할지 또는 하지 않을지 필터 설정이 가능
+  - @SpringBootApplication 안에 있음
+- 대표적인 `@Component`의 종류
   - @Repository
   - @Service
   - @Controller
@@ -105,7 +106,7 @@ Spring IoC Container
   - 프로토타입 빈이 싱글톤 빈을 참조하면 문제가 없음
   - 싱글톤 빈이 프로토타입 빈을 참조하면 프로토타입 빈의 업데이트에서 문제가 생길 수 있음 -> Provider / scoped-proxy / Object-Provider 등으로 보완햐줘야함
   - 프로퍼티를 공유
-  - ApplicationContext 초기 구동시 인스턴스 생성
+  - `ApplicationContext 초기 구동시 인스턴스 생성`
 
 ### Enviroment
 
