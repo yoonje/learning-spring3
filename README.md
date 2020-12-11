@@ -42,8 +42,8 @@ Spring IoC Container
 - IoC Container를 사용하는 이유
   - 객체의 관리를 컨테이너를 통해서 프레임워크의 강력한 기능을 지원
   - 애플리이션 전반에서 하나만 만들어서 사용하는 `싱글톤 스코프로 제공`
-  - 라이프 사이클 인터페이스를 지원
-    - `PostConstruct` 등등..
+  - `라이프 사이클` 인터페이스를 지원
+    - @PostConstruct 등등..
 - BeanFactory: 스프링 IoC 컨테이너의 최상위 인터페이스
 - Application Context: BeanFactory 상속 받은 인터페이스로 BeanFactory 보다 더 다양한 기능 제공
 
@@ -67,8 +67,45 @@ Spring IoC Container
   - `@SpringBootApplication`이 붙어 있으면 그 안에 `@ComponentScan`이 있어서 기본 프로젝트는 그 안에 어노테이션이 들어간 빈 등록이 적용이 되어 있고 ApplicationContext까지 만들어 줌
   
 ### @Autowire
+- @Autowire를 사용하면 벌어지는 일
+  - 필요한 의존 객체의 `타입에 해당하는 빈을 찾아 할당(주입) 해줌`
+- @Autowire를 사용하는 위치
+  - 생성자 (스프링 4.3 부터는 생략 가능)
+  - 세터 (별로 사용하지 않음)
+  - 필드
+- 다형성을 포함한 같은 타입의 빈이 여러개 일 때 @Autowire에서 구별하는 법
+  - @Primary
+  - 해당 타입 의빈 모두 주입 받기
+  - `@Qualifier (빈 이름으로 주입)`
+- 동작 원리
+  - BeanPostProcessor
+    - 새로 만든 빈 인스턴스를 수정할 수 있는 라이프 사이클 인터페이스
+  - AutowiredAnnotationBeanPostProcessor​ extends BeanPostProcessor
+    - 스프링이 제공하는 @Autowired와 @Value 애노테이션 @Inject 애노테이션을 지원하는 애노테이션 처리기
+
+### @Component와 컴포넌트 스캔
+- `@ComponentScan` 주요 기능
+  - 스캔 시작 위치 설정
+  - 어떤 애노테이션을 스캔할지 또는 하지 않을지 필터 설정
+- 대표적인 `@Component`
+  - @Repository
+  - @Service
+  - @Controller
+  - @Configuration
+  - @Bean
 
 ### 빈의 스코프
+- 스코프(@Scope)
+  - 싱글톤(기본 값): 해당 빈의 인스턴스가 애플리케이션에 단 하나
+  - 프로토타입(@Scope("prototype")): 해당 빈의 인스턴스가 애플리케이션에 여러 개
+    - Request
+    - Session
+    - WebSocket
+- 주의 사항
+  - 프로토타입 빈이 싱글톤 빈을 참조하면 문제가 없음
+  - 싱글톤 빈이 프로토타입 빈을 참조하면 프로토타입 빈의 업데이트에서 문제가 생길 수 있음 -> Provider / scoped-proxy / Object-Provider 등으로 보완햐줘야함
+  - 프로퍼티를 공유
+  - ApplicationContext 초기 구동시 인스턴스 생성
 
 ### Enviroment
 
