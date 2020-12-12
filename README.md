@@ -109,12 +109,71 @@ Spring IoC Container
   - `ApplicationContext 초기 구동시 인스턴스 생성`
 
 ### Enviroment
+- 프로파일
+  - `빈들의 그룹`
+  - ApplicationContext의 Environment​의 역할은 활성화할 프로파일 확인 및 설정
+- 프로파일을 사용하는 경우 
+  - 테스트 환경에서는 A라는 빈을 사용하고, 배포 환경에서는 B라는 빈을 쓰고 싶을 때처럼 환경에 따라 사용할 빈들이 달라질 때 사용
+- 프로파일 정의하기
+  - 클래스에 정의
+    - @Configuration @Profile(“test”)
+    - @Component @Profile(“test”)
+  - 메소드에 정의
+    - @Bean @Profile(“test”)
+- 프로파일 설정하기
+  - 인텔레리제이 vm option에서 `-Dspring.profiles.avtive=”A,B,...”`
+  - 인텔레리제이 Active Profiles에서 `A`
+- 프로파일 표현식
+  - ! (not)
+  - & (and)
+  - |(or)
+- 프로퍼티
+  - `다양한 방법으로 정의할 수 있는 설정 값`
+  - ApplicationContext의 Environment​의 역할은 프로퍼티 소스 설정 및 프로퍼티 값 가져오기
+- 프로퍼티에서 값을 주는 방법
+  - vm 옵션으로 주기
+  - @PropertySource에서 파일을 읽고 프로퍼티를 추가하기
+  - 스프링 부트에서는 application.properties으로 기본 프로퍼티 소스 지원 
 
 ### MessageSource
+- MessageSource
+  - `ApplicationContext의 MessageSource는 국제화 기능을 제공하는 인터페이스`
+  - getMessage(String code, Object[] args, String, default, Locale, loc)을 통해서 메세지를 얻을 수 있음
+- 스프링 부트를 사용한다면 별다른 설정 필요없이 messages.properties를 이용해서 사용
+  - messages.properties
+  - messages_ko_kr.properties
 
 ### ApplicationEventPublisher
+- ApplicationEventPublisher
+  - `ApplicationContext의 ​ApplicationEventPublisher는 이벤트 프로그래밍을 위한 기능을 제공하는 인터페이스`
+- 이벤트 만들기
+  - 스프링 4.2부터는 POJO로 이벤트 클래스를 만들어 됨
+- 이벤트 발생시키기
+  - 이벤트를 발생시키는 빈에서 `ApplicationRunner`를 implsments하고 run 메소드를 오버라이딩할 때 거기서 ApplicationEventPublisher.publishEvent();를 활용
+- 이벤트 처리하기
+  - 스프링 4.2부터는 ​빈으로 등록한 핸들러 클래스의 메소드에서 @EventListener​를 빈의 메소드로 사용
+  - 순서를 정하고 싶다면 `@Order`와 함께 사용
+  - 기본적으로는 synchronized 비동기적으로 실행하고 싶다면 `@Async`와 함께 사용
+- 스프링이 제공하는 기본 이벤트
+  - ContextRefreshedEvent: ApplicationContext를 초기화 했더나 리프래시 했을 때 발생
+  - ContextStartedEvent: ApplicationContext를 start()하여 라이프사이클 빈들이 시작
+신호를 받은 시점에 발생
+  - ContextStoppedEvent: ApplicationContext를 stop()하여 라이프사이클 빈들이 정지
+신호를 받은 시점에 발생
+  - ContextClosedEvent: ApplicationContext를 close()하여 싱글톤 빈 소멸되는 시점에
+발생
+  - RequestHandledEvent: HTTP 요청을 처리했을 때 발생
 
 ### ResourceLoader
+- ResourceLoader
+  - `ApplicationContext의 ResourceLoader는 리소스를 읽어오는 기능을 제공하는 인터페이스`
+  - Resource getResource(java.lang.String location)를 통해서 리소르를 일거올 수 있음
+- 리소스 읽어오기
+  - 파일 시스템에서 읽어오기
+  - 클래스패스에서 읽어오기
+  - URL로 읽어오기
+  - 상대/절대 경로로 읽어오기
+
 
 Spring Resource Validation
 =======
