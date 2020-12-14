@@ -178,7 +178,38 @@ Spring IoC Container
 
 Spring Resource Validation
 =======
-
+- Resource
+  - java.net.URL을 추상화하여 다양한 기능을 제공하는 인터페이스
+  - 클래 스패스 기준으로 리소스 읽어오는 기능과 ServletContext를 기준으로 상대 경로로 읽어오는 기능 추가
+  - 새로운 핸들러를 등록하여 특별한 URL 접미사를 만들어 사용 
+- Resource의 주요 메소드
+  - getInputStream()
+  - exitst()
+  - isOpen()
+  - getDescription(): 전체 경로 포함한 파일 이름 또는 실제 URL
+- `Resource의 주요 구현체`
+  - UrlResource: ​java.net.URL​ 참고, 기본으로 지원하는 프로토콜 http, https, ftp, file, jar. 
+  - ClassPathResource: 지원하는 접두어 classpath:
+  - FileSystemResource
+  - ServletContextResource: 웹 애플리케이션 루트에서 상대 경로로 리소스 찾음
+- 리소스 읽어오기
+  - Resource의 타입은 `locaion 문자`열과 `​ApplicationContext의 타입`에​​ 따라 결정
+  - ApplicationContext의 타입에 상관없이 리소스 타입을 강제하려면 java.net.URL 접두어(+ classpath:)중 하나를 사용
+    - classpath:​​me/whiteship/config.xml -> ClassPathResource
+    - file://​​/some/resource/path/config.xml -> FileSystemResource
+  - 접두어가 없으면 ServletContextResource이 기본 리소스 타입
+- Validator
+  - 애플리케이션에서 사용하는 객체 검증용 인터페이스
+  - 모든 계층(웹, 서비스, 데이터)에서 사용
+  - DataBinder에 들어가 바인딩 할 때 같이 사용
+  - Bean Validation을 위해 구현체로 hibernate-validator 사용
+- Validator를 활용하기 위해 오버라이딩해야하는 메소드
+  - `boolean supports(Class clazz)`: 어떤 타입의 객체를 검증할 때 사용할 것인지 결정
+  - `void validate(Object obj, Errors e)`: 실제 검증 로직을 이 안에서 구현
+    - 구현할 때 ValidationUtils 사용하며 편리
+- 스프링 부트 2.0.5 이상 버전을 사용할 때
+  - LocalValidatorFactoryBean ​​빈으로 자동 등록으로 등록되므로 Validator를 의존 주입 받아와서 사용 가능
+  - 간단한 검증 로직에서는 Validator를 오버라이딩 하지 않고, 애노테이션만으로 검증이 가능
 
 Spring Data Binding
 =======
