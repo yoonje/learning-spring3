@@ -24,6 +24,7 @@ Spring IoC Container
   public class BookService {
       private BookRepository bookRepository;
 
+      @Autowired
       public BookService(BookRepository bookRepository){
           this.bookRepository = bookRepository;
       }
