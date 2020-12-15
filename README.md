@@ -213,10 +213,72 @@ Spring Resource Validation
 
 Spring Data Binding
 =======
-
+- 데이터 바인딩
+  - 입력값은 대부분 문자열인데, 그 값을 객체가 가지고 있는 int, long, Boolean, Date 또는 도메인 타입으로도 변환해서 넣어주는 기능
+- `PropertyEditor`
+  - 고전적인 데이터 바인딩의 추상화 인터페이스
+  - 쓰레드-세이프 하지 않아서 빈으로 등록하지 않아야함
+  - Object와 String 간의 변환만 할 수 있어, 사용 범위가 제한적임
+- Converter와 Formattter
+  - `Converter`
+    - ConversionService의 일종으로 S타입을 T타입으로 변환할 수 있는 현대 데이터 바인딩의 일반적인 변환기
+    - ConverterRegistry​에 등록해서 사용
+    - 기본적인 자료형에 대해서는 이미 등록이 되어 있음
+    - 스프링 부트에서는 빈이으로 설정되어 있으면 자동 등록이 되어 따로 Web Mvc 설정에서 registry에 컨버터를 등록할 이유가 없음
+    - 쓰레드-세이프하여 빈으로 등록 가능
+    ```java
+    public class StringToEventConverter implements Converter<String, Event> {
+      @Override
+      public Event convert(String source) {
+         Event event = new Event(); 
+         event.setId(Integer.parseInt(source)); 
+         return event;
+         } 
+    }
+    ```
+  - `Formatter`
+    - ConversionService의 일종으로 Converter보다 더 웹 쪽에 특화된 데이터 바인딩의 추상화 인터페이스
+    - Object와 String 간의 변환을 담당
+    - 문자열을 Locale에 따라 다국화하는 기능도 제공
+    - FormatterRegistry​에 등록해서 사용
+    - 스프링 부트에서는 빈이으로 설정되어 있으면 자동 등록이 되어 따로 Web Mvc 설정에서 registry에 포맷터를 등록할 이유가 없음
+    - 쓰레드-세이프하여 빈으로 등록 가능
+    ```java
+    public class EventFormatter implements Formatter<Event> {
+      @Override
+      public Event parse(String text, Locale locale) throws ParseException {
+        Event event = new Event();
+        int id = Integer.parseInt(text); event.setId(id);
+        return event;
+      }
+    
+      @Override
+      public String print(Event object, Locale locale) {
+        return object.getId().toString(); 
+      }
+    }
+    ```
 
 Spring SpEL
 =======
+- SpEL
+  - 스프링 프로젝트 전반에 걸쳐 사용
+  - 연산자와 메소드 호출을 지원하며, 문자열 템플릿 기능도 제공
+- 문법
+  - #{“표현식"}
+  - #{${my.data} + 1}처럼 표현식은 프로퍼티를 가지게 하여 혼용이 가능(반대는 안됨)
+- 주로 사용되는 곳
+  - 스프링
+    - @Value 애노테이션
+    - @ConditionalOnExpression 애노테이션
+  - 스프링 시큐리티
+    - 메소드 시큐리티, @PreAuthorize, @PostAuthorize, @PreFilter, @PostFilter
+    - XML 인터셉터 URL 설정
+  - 스프링 데이터
+    - @Query 애노테이션
+  - Thymeleaf
+
+
 
 Spring AOP
 =======
