@@ -315,4 +315,12 @@ Spring AOP
 
 Spring Null Safety
 =======
-
+- Null 관련 어노테이션: 스프링 프레임워크 5에 추가된 Null 관련 애노테이션
+  - @NonNull
+  - @Nullable
+  - @NonNullApi (패키지 레벨 설정)
+  - @NonNullFields (패키지 레벨 설정)
+- Null 관련 어노테이션의 목적
+  - (툴의 지원을 받아) 컴파일 시점에 최대한 NullPointerException을 방지하는 것
+- 사용 하는 방식
+  - 인텔리제이에서 Nullable/NonNull 설정에서 스프링 Null을 추가해줘야함
